@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="./no.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!-- <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery for AJAX -->
+
+    <link rel="stylesheet" href="./style.css">
+    <title>N̳V̳³̳ ̳H̳E̳V̳E̳N̳V̳E̳R̳S̳E̳</title>
+  </head>
+  <body style="background-color: lavender;">
+
+    <div class="loader-container">
+        <img src="./loader.gif" alt="Loading...">
+      </div>
+    
+
+    <nav class=" navbar navbar-expand-md bg ">
+        <a href="#" class="navbar-brand fs-3 ms-3 text-white">N̳V̳³̳ ̳H̳E̳V̳E̳N̳V̳E̳R̳S̳E̳</a>
+        
+    <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#btn">
+        <i class='bx bx-menu bx-md'></i>
+    </button>
+    <div class=" collapse navbar-collapse " id="btn">
+        <!-- <ul class="navbar-nav ms-auto">
+            <li class=" nav-item">
+                <a href="" class=" nav-link ms-3 text-white">HOME</a>
+            </li>
+            <li class=" nav-item">
+                <a href="#about" class=" nav-link ms-3 text-white">ABOUT</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link ms-3 text-white dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    SERVICE
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="hotel.html">Hotel</a></li>
+                    <li><a class="dropdown-item" href="Travel\travel.html">Tourism</a></li>
+                    <li><a class="dropdown-item" href="#">Transportation</a></li>
+                    <li><a class="dropdown-item" href="health-wellness-app\index.html">Wellness</a></li>
+                </ul>
+            </li>
+            <li class=" nav-item">
+                <a href="#about" class=" nav-link ms-3 text-white">CONTACT</a>
+            </li>
+    </ul> -->
+    </div>
+    <li class=" nav-item navbar-nav ms-auto"></li>
+        <a href="login.htm" class=" nav-link ms-3 text-white">
+            <button id="toggleFormBtn" type="button" class="btn btn-info text-white ">Login</button>
+            <!-- <button onclick="logout()" class="btn btn-info text-white ">Logout</button> -->
+        </a>
+        </li>
+    </nav>  
+    <div class="video-container">
+      <video autoplay muted loop id="bg-video">
+        <source src="./taj.mp4" type="video/mp4">
+      </video>
+      <div class="content">
+        <h1>Welcome to NV³ HEVENVERSE</h1>
+        <p>Your awesome tagline goes here.</p>
+      </div>
+    </div>
+
+      <br>
+      <div class="container">
+        <div class="title">
+            <h2>Hotel Amenities</h2>
+            <p class="text-muted">Discover the amenities we offer to make your stay comfortable.</p>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="box">
+                    <i class="bi bi-cake"></i>
+                    <h5>Celebrations</h5>
+                    <p>Make your movements come true with Us.</p>
+                    <!-- <button onclick="openLink('https://example.com/1')">Learn More</button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <i class="bi bi-wifi"></i>
+                    <h5>Wi-Fi</h5>
+                    <p>Enjoy 24/7 high speed internet availability.</p>
+                    <!-- <button onclick="openLink('https://example.com/2')">Learn More</button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <i class="bi bi-file-lock"></i>
+                    <h5>Security</h5>
+                    <p>Feel safe, secured and enjoy your privacy under highsecurity.</p>
+                    <!-- <button onclick="openLink('https://example.com/3')">Learn More</button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <i class="bi bi-person"></i>
+                    <h5>Services</h5>
+                    <p>Make yourself comfortable with our services.</p>
+                    <!-- <button onclick="openLink('https://example.com/4')">Learn More</button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <i class="fas fa-hamburger"></i>
+                    <h5>Food</h5>
+                    <p>Enjoy your healthy, hygenic, and mouthwatering meals.</p>
+                    <!-- <button onclick="openLink('https://example.com/5')">Learn More</button> -->
+                </div>
+            </div>
+            <div class="col">
+                <div class="box">
+                    <i class="bi bi-house"></i>
+                    <h5>Comfort</h5>
+                    <p>Feel yourself comfortable as it's your own house.</p>
+                    <!-- <button onclick="openLink('https://example.com/6')">Learn More</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+  <br>
+  <br>
+      
+    
+
+
+
+
+
+  <section id = "about">
+    <div class="footer bg-dark text-light py-5">
+      <div class="container">
+        <div class="row">
+          <!-- About Section -->
+          <div class="col-md-6">
+            <h5>About Us</h5>
+            <p>Learn more about our heritage, luxury services, and commitment to excellence.</p>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-light">Our Story</a></li>
+              <li><a href="#" class="text-light">Careers</a></li>
+              <li><a href="#" class="text-light">Sustainability</a></li>
+              <li><a href="#" class="text-light">Press</a></li>
+            </ul>
+          </div>
+    
+          <!-- Contact Section -->
+          <div class="col-md-6">
+            <h5>Contact</h5>
+            <h6>For Bookings Contact</h6>
+            <p>1-800-111-825</p>
+            <h6>Customer Support</h6>
+            <p><a href="mailto:contacttaj@tajhotels.com" class="text-light">contact@NV3hotels.com</a></p>
+            <p><a href="mailto:website.feedback@tajhotels.com" class="text-light">website.feedback@NV3hotels.com</a></p>
+          </div>
+        </div>
+    
+        <!-- Quick Links Section -->
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <h5>Quick Links</h5>
+            <ul class="list-unstyled d-flex justify-content-center flex-wrap">
+              <li><a href="#" class="text-light mx-3">Hotels</a></li>
+              <li><a href="#" class="text-light mx-3">Dining</a></li>
+              <li><a href="#" class="text-light mx-3">Wellness</a></li>
+              <li><a href="#" class="text-light mx-3">Timeless Weddings</a></li>
+              <li><a href="#" class="text-light mx-3">Event Venues</a></li>
+              <li><a href="#" class="text-light mx-3">NV3Blog</a></li>
+            </ul>
+          </div>
+        </div>
+    
+        <!-- Social Links Section -->
+        <div class="row mt-4">
+          <div class="col-md-12 text-center">
+            <h5>Connect with Us</h5>
+            <a href="#" class="text-light mx-2"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-light mx-2"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-light mx-2"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-light mx-2"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="text-light mx-2"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+    
+        <!-- Subscription Section (optional) -->
+        <div class="row mt-4">
+          <div class="col-md-12 text-center">
+            <h5>Subscribe for Latest Updates</h5>
+            <form>
+              <div class="input-group mb-3">
+                <input type="email" class="form-control" placeholder="Enter your email address" required>
+                <button class="btn btn-secondary" type="submit">Subscribe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <script>
+    function loader() {
+      document.querySelector('.loader-container').classList.add('fade-out');
+    }
+
+    window.onload = function() {
+      setTimeout(loader, 1000); 
+    }
+
+
+
+
+  app.controller('FooterController', function ($scope) {
+  $scope.quickLinks = [
+    { name: 'Hotels', url: '#' },
+    { name: 'Dining', url: '#' },
+    { name: 'Wellness', url: '#' },
+    { name: 'Timeless Weddings', url: '#' },
+  ];
+
+  $scope.brands = [
+    { name: 'Taj', logo: 'taj-logo.png' },
+    { name: 'SeleQtions', logo: 'seleqtions-logo.png' },
+    { name: 'Gateway', logo: 'gateway-logo.png' },
+  ];
+
+  $scope.socialLinks = [
+    { icon: 'fab fa-facebook', url: '#' },
+    { icon: 'fab fa-twitter', url: '#' },
+    { icon: 'fab fa-instagram', url: '#' },
+    { icon: 'fab fa-youtube', url: '#' },
+  ];
+});
+
+// Select elements
+const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+const closeBtn = document.getElementById("close-btn");
+const chatbotContainer = document.getElementById("chatbot-container");
+const chatbotBubble = document.getElementById("chatbot-bubble");
+
+// Predefined responses
+const responses = {
+    greet: "Hi there! How can I assist you today?",
+    hello: "Hello! How can I assist you today?",
+    help: "I can help you with navigating the website, answering FAQs, or anything else you might need.",
+    about: "This is a chatbot designed to assist you with the website. Ask me anything!",
+    navigate: "Sure, I can help you navigate. Where would you like to go? (homepage, products, contact)",
+    default: "I'm sorry, I didn't quite understand that. Can you ask something else?",
+};
+
+// Function to handle user input
+function handleUserInput() {
+    const userText = userInput.value.trim();
+    if (userText === "") return;
+
+    // Display user message
+    const userMessage = document.createElement("div");
+    userMessage.classList.add("user-message");
+    userMessage.textContent = userText;
+    chatBox.appendChild(userMessage);
+
+    // Clear input field
+    userInput.value = "";
+
+    // Process the response
+    setTimeout(() => {
+        const response = generateResponse(userText);
+        const botMessage = document.createElement("div");
+        botMessage.classList.add("bot-message");
+        botMessage.textContent = response;
+        chatBox.appendChild(botMessage);
+
+        // Scroll to the latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+}
+
+// Function to generate bot responses based on user input
+function generateResponse(userText) {
+    const lowerText = userText.toLowerCase();
+
+    // Match the text and return corresponding response
+    if (lowerText.includes("hello")) {
+        return responses.hello;
+    } else if (lowerText.includes("help")) {
+        return responses.help;
+    } else if (lowerText.includes("about")) {
+        return responses.about;
+    } else if (lowerText.includes("navigate")) {
+        return responses.navigate;
+    } else {
+        return responses.default;
+    }
+}
+
+// Handle suggestion button click to send predefined text
+$(document).on('click', '.suggestion-btn', function () {
+    const suggestionText = $(this).text().toLowerCase(); // Convert to lowercase to match response
+    userInput.value = suggestionText;  // Fill the input with the suggestion text
+    handleUserInput();  // Trigger user input handling
+});
+
+// Event listeners
+sendBtn.addEventListener("click", handleUserInput);
+userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        handleUserInput();
+    }
+});
+
+// Handle close button to minimize the chatbot
+closeBtn.addEventListener("click", () => {
+    chatbotContainer.style.display = "none";
+    chatbotBubble.style.display = "flex";
+});
+
+// Handle bubble button to open the chatbot
+chatbotBubble.addEventListener("click", () => {
+    chatbotContainer.style.display = "block";
+    chatbotBubble.style.display = "none";
+});
+
+// Greet the user when the page loads and show suggestions
+window.onload = () => {
+    // Display greeting message
+    const greetingMessage = document.createElement("div");
+    greetingMessage.classList.add("bot-message");
+    greetingMessage.textContent = responses.greet;
+    chatBox.appendChild(greetingMessage);
+
+    // Display suggestions
+    const suggestionsContainer = document.createElement("div");
+    suggestionsContainer.id = "suggestions";
+
+    const suggestions = ["Hello", "Help", "About", "Navigate"];
+    suggestions.forEach((suggestion) => {
+        const suggestionButton = document.createElement("button");
+        suggestionButton.classList.add("suggestion-btn");
+        suggestionButton.textContent = suggestion;
+        suggestionsContainer.appendChild(suggestionButton);
+    });
+
+    chatBox.appendChild(suggestionsContainer);
+};
+function openLink(url) {
+            window.location.href = url;
+        }
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    
+  </body>
+</html>

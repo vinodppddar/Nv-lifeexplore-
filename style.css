@@ -1,0 +1,373 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* background-image: url(https://img.freepik.com/premium-photo/abstract-geometric-background-pink-white-color-palette_684882-1890.jpg);
+    background-size: cover; */
+}
+.loader-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    transition: top 0.6s ease;
+  }
+
+  .loader-container.fade-out {
+    top: -120%;
+  }
+
+  
+  .loader-container img {
+    width: 500px; 
+    height: auto;
+  }
+
+.bg{
+    background-color: rgb(183, 91, 34);
+}
+nav .nav-item a:hover{
+    color:yellowgreen;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn.active {
+    background-color: #007bff !important;
+    color: white !important;
+}
+
+.big-text {
+    font-size: 150px; 
+    font-weight: bold;
+    font-family: 'Arial', sans-serif; 
+    color: #4CAF50; 
+    text-shadow: 3px 3px 8px rgba(0,0,0,0.3); 
+    text-align: center;
+    margin-top: 20px;
+  }
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+  }
+  
+  .video-container {
+    position: relative;
+    height: 70%;
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  video#bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    color: white;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 3rem;
+  }
+  
+  p {
+    font-size: 1.5rem;
+  }
+
+
+
+  .footer a {
+    text-decoration: none;
+  }
+  .footer img {
+    max-height: 50px;
+  }
+  .content {
+    text-align: left; 
+    margin-left: 0; 
+    padding: 20px; 
+  }
+  
+  
+  /* General Body Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f1f1f1;
+  margin: 0;
+  padding: 0;
+}
+
+/* Chatbot Container */
+#chatbot-container {
+  width: 300px;
+  height: 450px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: none; /* Initially hidden */
+  z-index: 9999;
+}
+
+/* Chatbot Bubble */
+#chatbot-bubble {
+  width: 50px;
+  height: 50px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  color: white;
+  font-size: 20px;
+}
+
+/* Chatbot Header */
+#chatbot-header {
+  background-color: #4CAF50;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Close button */
+#close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Chatbox (where messages will appear) */
+#chatbot-body {
+  height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+}
+
+#chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Input and Send Button Container */
+#input-container {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  box-sizing: border-box;
+  justify-content: space-between;
+}
+
+#user-input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+#send-btn {
+  width: 15%;
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+}
+
+#send-btn:hover {
+  background-color: #45a049;
+}
+
+/* Suggestions Styling */
+#suggestions {
+  display: flex;
+  gap: 8px; /* Reduced gap between suggestions */
+  flex-wrap: wrap;
+  margin-top: 10px;
+  justify-content: flex-start;
+}
+
+.suggestion-btn {
+  background-color: #e0e0e0;
+  border: none;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.suggestion-btn:hover {
+  background-color: #d5d5d5;
+}
+
+/* Bot and User Message Styles */
+.bot-message {
+  background-color: #5dc6d4;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 80%;
+}
+
+.user-message {
+  background-color: #d1c4e9;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 80%;
+  align-self: flex-end;
+}
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  padding: 40px;
+}
+.title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+.box {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.box:hover {
+  transform: translateY(-5px);
+}
+.box i {
+  font-size: 40px;
+  color: #007BFF;
+  margin-bottom: 15px;
+}
+.box h5 {
+  font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.box p {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 15px;
+}
+.box button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.box button:hover {
+  background-color: #0056b3;
+}
+
+
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+.box {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  text-align: center;
+  padding: 20px;
+}
+.box img {
+  width: 100%;
+  border-radius: 8px;
+}
+.box .price {
+  color: #28a745;
+  font-size: 18px;
+  margin: 10px 0;
+  display: block;
+}
+.box h3 {
+  font-size: 22px;
+  margin: 10px 0;
+}
+.stars i {
+  color: #ffc107;
+}
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+.btn:hover {
+  background: #0ca726;
+}
+input[type="number"] {
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-top: 5px;
+}

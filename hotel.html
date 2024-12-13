@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Order</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    margin: 0;
+    padding: 0;
+}
+
+/* Chatbot Container */
+#chatbot-container {
+    width: 300px;
+    height: 450px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none; /* Initially hidden */
+    z-index: 9999;
+}
+
+/* Chatbot Bubble */
+#chatbot-bubble {
+    width: 50px;
+    height: 50px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+    color: white;
+    font-size: 20px;
+}
+
+/* Chatbot Header */
+#chatbot-header {
+    background-color: #4CAF50;
+    padding: 10px;
+    color: #fff;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Close button */
+#close-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Chatbox (where messages will appear) */
+#chatbot-body {
+    height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+#chat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Input and Send Button Container */
+#input-container {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    box-sizing: border-box;
+    justify-content: space-between;
+}
+
+#user-input {
+    width: 80%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#send-btn {
+    width: 15%;
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #4CAF50;
+    color: #fff;
+    cursor: pointer;
+}
+
+#send-btn:hover {
+    background-color: #45a049;
+}
+
+/* Suggestions Styling */
+#suggestions {
+    display: flex;
+    gap: 8px; /* Reduced gap between suggestions */
+    flex-wrap: wrap;
+    margin-top: 10px;
+    justify-content: flex-start;
+}
+
+.suggestion-btn {
+    background-color: #e0e0e0;
+    border: none;
+    padding: 8px 12px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.suggestion-btn:hover {
+    background-color: #d5d5d5;
+}
+
+/* Bot and User Message Styles */
+.bot-message {
+    background-color: #5dc6d4;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.user-message {
+    background-color: #d1c4e9;
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%;
+    align-self: flex-end;
+}
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+
+    <div id="chatbot-container">
+        <div id="chatbot-header">
+            <h3>Chatbot</h3>
+            <button id="close-btn">X</button>
+        </div>
+        <div id="chatbot-body">
+            <div id="chat-box"></div>
+        </div>
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Ask me anything...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Bubble (to minimize the chat) -->
+    <div id="chatbot-bubble" onclick="toggleChatbot()">
+        <span>💬</span> <!-- A simple speech bubble icon -->
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Select elements
+const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
+const closeBtn = document.getElementById("close-btn");
+const chatbotContainer = document.getElementById("chatbot-container");
+const chatbotBubble = document.getElementById("chatbot-bubble");
+
+// Predefined responses
+const responses = {
+    greet: "Hi there! I'm Navi, How can I assist you today?",
+    hello: "Hello! How can I assist you today?",
+    help: "I can help you with navigating the website, answering FAQs, or anything else you might need.",
+    about: "This is a chatbot designed to assist you with the website. Ask me anything!",
+    navigate: "Sure, I can help you navigate. Where would you like to go? (homepage, products, contact)",
+    default: "I'm sorry, I didn't quite understand that. Can you ask something else?",
+};
+
+// Function to handle user input
+function handleUserInput() {
+    const userText = userInput.value.trim();
+    if (userText === "") return;
+
+    // Display user message
+    const userMessage = document.createElement("div");
+    userMessage.classList.add("user-message");
+    userMessage.textContent = userText;
+    chatBox.appendChild(userMessage);
+
+    // Clear input field
+    userInput.value = "";
+
+    // Process the response
+    setTimeout(() => {
+        const response = generateResponse(userText);
+        const botMessage = document.createElement("div");
+        botMessage.classList.add("bot-message");
+        botMessage.textContent = response;
+        chatBox.appendChild(botMessage);
+
+        // Scroll to the latest message
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 1000);
+}
+
+// Function to generate bot responses based on user input
+function generateResponse(userText) {
+    const lowerText = userText.toLowerCase();
+
+    // Match the text and return corresponding response
+    if (lowerText.includes("hello")) {
+        return responses.hello;
+    } else if (lowerText.includes("help")) {
+        return responses.help;
+    } else if (lowerText.includes("about")) {
+        return responses.about;
+    } else if (lowerText.includes("navigate")) {
+        return responses.navigate;
+    } else {
+        return responses.default;
+    }
+}
+
+// Handle suggestion button click to send predefined text
+$(document).on('click', '.suggestion-btn', function () {
+    const suggestionText = $(this).text().toLowerCase(); // Convert to lowercase to match response
+    userInput.value = suggestionText;  // Fill the input with the suggestion text
+    handleUserInput();  // Trigger user input handling
+});
+
+// Event listeners
+sendBtn.addEventListener("click", handleUserInput);
+userInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        handleUserInput();
+    }
+});
+
+// Handle close button to minimize the chatbot
+closeBtn.addEventListener("click", () => {
+    chatbotContainer.style.display = "none";
+    chatbotBubble.style.display = "flex";
+});
+
+// Handle bubble button to open the chatbot
+chatbotBubble.addEventListener("click", () => {
+    chatbotContainer.style.display = "block";
+    chatbotBubble.style.display = "none";
+});
+
+// Greet the user when the page loads and show suggestions
+window.onload = () => {
+    // Display greeting message
+    const greetingMessage = document.createElement("div");
+    greetingMessage.classList.add("bot-message");
+    greetingMessage.textContent = responses.greet;
+    chatBox.appendChild(greetingMessage);
+
+    // Display suggestions
+    const suggestionsContainer = document.createElement("div");
+    suggestionsContainer.id = "suggestions";
+
+    const suggestions = ["Hello", "Help", "About", "Navigate"];
+    suggestions.forEach((suggestion) => {
+        const suggestionButton = document.createElement("button");
+        suggestionButton.classList.add("suggestion-btn");
+        suggestionButton.textContent = suggestion;
+        suggestionsContainer.appendChild(suggestionButton);
+    });
+
+    chatBox.appendChild(suggestionsContainer);
+};
+
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;1,400;1,500;1,700&family=Roboto:wght@300;400;500;700;900&display=swap');
+
+:root{
+    --pink:#ff03a7;
+}
+
+
+*{
+    font-family: 'Nunito',sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: all .2s linear;
+}
+
+*::selection{
+    background: var(--pink);
+    color: white;
+}
+
+html{
+    font-size: 62.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+}
+
+body{
+    background: rgb(248, 248, 248);
+}
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #fff;
+    padding: 2rem 9%;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1) ;
+}
+
+header .logo{
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color: #666;
+}
+
+header .logo i{
+    padding-right: 0.5rem;
+    color: var(--pink);
+}
+
+header .navbar a{
+    font-size: 2rem;
+    margin-left: 2rem;
+    color: #666;
+}
+
+header .navbar a:hover{
+    color: var(--pink);
+}
+
+#menu-bar{
+    font-size: 3rem;
+    cursor: pointer;
+    color: #666;
+    border: 0.5rem solid #666;
+    border-radius: 0.1rem;
+    padding: .5rem 1.5rem;
+    display: none;
+}
+
+section{
+    padding: 2rem 9%;
+}
+
+.heading{
+    text-align: center;
+    font-size: 3.5rem;
+    padding: 1rem;
+    color: #666;
+}
+
+.heading span{
+    color: var(--pink);
+}
+
+
+
+.btn{
+    display: inline-block;
+    padding: 0.8rem 3rem;
+    border: 0.2rem solid var(--pink);
+    color: var(--pink);
+    font-size: 1.7rem;
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    margin-top: 1rem;
+}
+
+.btn::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--pink);
+    transition: .3s linear;
+    z-index: -1;
+}
+
+.btn:hover::before{
+    width: 100%;
+    left: 0;
+}
+
+.btn:hover{
+    color: #fff;
+}
+
+
+.home{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    min-height: 100vh;
+    align-items: center;
+    background: url(images/home-bg.jpg) no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.home .content{
+    flex: 1 1 40rem;
+}
+
+.home .image{
+    flex: 1 1 40rem;
+}
+
+.home .image img{
+    width: 135%;
+    padding: 5rem;
+    animation: float 3s linear infinite;
+}
+
+@keyframes float{
+    0%, 100%{
+        transform: translateY(0rem);
+    }
+    50%{
+        transform: translateY(3rem);
+    }
+}
+
+.home .content h3{
+    font-size: 6rem;
+    color: black; 
+}
+
+.home .content p{
+    font-size: 1.8rem;
+    color: #666; 
+    padding: 1rem 0 ;
+}
+
+.speciality .box-container {
+     display:  flex;
+     flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.speciality .box-container .box{
+    flex: 1 1 30rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0.5rem 1rem rgba(188, 180, 180, 0.1);
+    border: 0.1rem solid rgba(238, 233, 233, 0.3);
+    cursor: pointer;
+    border-radius: .5rem;
+}
+
+.speciality .box-container .box .image{
+   
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: -100%;
+    left: 0;
+}
+
+.speciality .box-container .box .content{
+    text-align: center;
+    background: #fff;
+    padding: 4rem;
+}
+
+
+.speciality .box-container .box .content h3{
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.speciality .box-container .box .content p{
+    font-size: 1.6rem;
+    color: #666;
+    padding: 1rem 0;
+}
+
+.speciality .box-container .box:hover .image{
+    top: 0;
+}
+
+
+.speciality .box-container .box:hover .content{
+    transform: translateY(90%);
+  }
+
+.popular .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.popular .box-container .box{
+    padding: 2rem;
+    background: #fff;
+    box-shadow: 0.5rem 1rem rgba(188, 180, 180, 0.1);
+    border: 0.1rem solid rgba(238, 233, 233, 0.3);
+    cursor: pointer;
+    border-radius: .5rem;
+    text-align: center;
+    flex: 1 1 30rem;
+    position: relative;
+}
+
+.popular .box-container .box img{
+     height: 25rem;
+     object-fit: cover;
+     width: 100%;
+     border-radius: .5rem;
+}
+
+.popular .box-container .box .price{
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    background: var(--pink);
+    color: #fff;
+    font-size: 2rem;
+    padding: 0.5rem 1rem;
+    border-radius: .5rem;
+}
+
+.popular .box-container .box h3{
+    color: #333;
+    font-size: 2.5rem;
+    padding-top: 1rem;
+}
+
+.popular .box-container .box .stars i{
+    color: gold;
+    font-size: 1.7rem;
+    padding: 1rem;
+}
+
+.steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem ;
+    padding: 1rem 0;
+}
+
+.steps .box{
+    flex: 1 1 25rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.steps .box img{
+    border-radius: 50%;
+    border: 1rem solid #fff;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+}
+
+.steps .box h3{
+    font-size: 3rem;
+    color: #333;
+    padding: 1rem 0;
+}
+
+
+.gallery .box-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.gallery .box-container .box{
+    height: 25rem;
+    flex: 1 1 30rem;
+    border: 1rem solid #fff;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .1);
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery .box-container .box img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+
+.gallery .box-container .box .content{
+    position: absolute;
+    top: -100;
+    left: 0 ;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, .9);
+    padding: 2rem;
+    padding-top: 5rem;
+    text-align: center;
+}
+
+
+.gallery .box-container .box .content h3{
+    font-size: 2.5rem;
+    color: #333;
+
+}
+
+.gallery .box-container .box .content p{
+    font-size:  1rem;
+    color: #666;
+    padding: 1rem 0;
+
+}
+
+.gallery .box-container .box:hover .content{
+    top: 0;
+}
+
+.review .box-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap:1.5rem;
+  }
+  
+  .review .box-container .box{
+    text-align: center;
+    padding:2rem;
+    border:1rem solid #fff;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.3);
+    border-radius: .5rem;
+    flex:1 1 30rem;
+    background:#333;
+    margin-top: 6rem;
+  }
+  
+  .review .box-container .box img{
+    height: 12rem;
+    width:12rem;
+    border-radius: 50%;
+    border:1rem solid #fff;
+    margin-top: -8rem;
+    object-fit: cover;
+  }
+  
+  .review .box-container .box h3{
+    font-size: 2.5rem;
+    color:#fff;
+    padding:.5rem 0;
+  }
+  
+  .review .box-container .box .stars i{
+    font-size: 2rem;
+    color:var(--pink);
+    padding:.5rem 0;
+  }
+  
+  .review .box-container .box p{
+    font-size: 1.5rem;
+    color:#eee;
+    padding:1rem 0;
+  }
+  
+
+  .order .row{
+    padding:2rem;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+    background:#fff;
+    display: flex;
+    flex-wrap: wrap;
+    gap:1.5rem;
+    border-radius: .5rem;
+  }
+  
+  .order .row .image{
+    flex:1 1 30rem;
+  }
+  
+  .order .row .image img{
+    height: 100%;
+    width:100%;
+    object-fit: cover;
+    border-radius: .5rem;
+  }
+  
+  .order .row form{
+    flex:1 1 50rem;
+    padding:1rem;
+  }
+  
+  .order .row form .inputBox{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .order .row form .inputBox input, .order .row form textarea{
+    padding:1rem;
+    margin:1rem 0;
+    font-size: 1.7rem;
+    color:#333;
+    text-transform: none;
+    border:.1rem solid rgba(0,0,0,.3);
+    border-radius: .5rem;
+    width:49%;
+  }
+  
+  .order .row form textarea{
+    width:100%;
+    resize: none;
+    height:15rem;
+  }
+  
+  .order .row form .btn{
+    background:none;
+  }
+  
+  .order .row form .btn:hover{
+    background:var(--pink);
+  }
+  
+  .footer{
+    background:#000;
+    text-align: center;
+  }
+  
+  .footer .share{
+    display: flex;
+    gap:1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .footer .credit{
+    padding:2.5rem 1rem;
+    color:#fff;
+    font-weight: normal;
+    font-size: 2rem;
+  }
+  
+  .footer .credit span{
+    color:var(--pink);
+  }
+  
+  #scroll-top{
+    position: fixed;
+    top:-120%;
+    right:2rem;
+    padding:.5rem 1.5rem;
+    font-size: 4rem;
+    background:var(--pink);
+    color:#fff;
+    border-radius: .5rem;
+    transition: 1s linear;
+    z-index: 1000;
+  }
+  
+  #scroll-top.active{
+    top:calc(100% - 12rem)
+  }
+  
+  .loader-container{
+    position: fixed;
+    top:0; left:0;
+    z-index: 10000;
+    background:#fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:100%;
+    width:100%;
+  }
+  
+  .loader-container.fade-out{
+    top:-120%;
+  }
+  
+
+@media(max-width:991px){
+    html{
+        font-size: 55%;
+        
+    }
+    header{
+        padding: 2rem;
+    }
+    
+    section{
+        padding: 2rem ;
+    }
+}
+
+@media(max-width:768px){
+    #menu-bar{
+        display: initial;
+    }
+
+    header .navbar{
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #f7f7f7;
+        border-top: 1rem solid rgba(0, 0, 0, .1) ;
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+    }
+    header .navbar.active{
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+      }
+
+
+    header .navbar a{
+        margin: 1.5rem;
+        padding: 1rem;
+        display: block;
+        border: 1rem solid  rgba(0, 0, 0, .1) ;
+        border-left: 1rem solid var(--pink);
+        background: #fff;
+    }
+
+} 
+
+@media(max-width:400px){
+    html{
+        font-size: 55%;
+        
+    }
+    header{
+        padding: 2rem;
+    }
+}
+    </style>
+
+    <!-- header section -->
+  <header>
+      <a href="index.html" class="logo"><i class="fas fa-utensils"></i> <- NV³ HEVENVERSE</a>
+      <div id="menu-bar" class="fas fa-bars"></div>
+      <nav class="navbar">
+          <a href="#home">Home</a>
+          <a href="#speciality">Speciality</a>
+          <a href="#popular">Popular</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#review">Review</a>
+          <a href="#order">Order</a>
+      </nav>
+  </header>
+
+  <!-- Home  -->
+
+  <section class="home" id="home">
+    <div class="content">
+        <h3>Food Made with Love</h3>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sunt consequatur dolor eius quo harum modi laboriosam assumenda amet quibusdam maiores, in rerum corrupti maxime cupiditate, dolorem nostrum eveniet numquam nesciunt?</p>
+        <a href="#" class="btn">order Now</a>
+    </div>
+
+    <div class="image" >
+        <img src="images/about-img.png" >
+    </div>
+  </section>
+
+  <!-- Speciality -->
+
+  <section class="speciality" id="speciality">
+      <h1 class="heading">our <span>speciality</span></h1>
+      <div class="box-container"> 
+          <div class="box">
+              <img class="image" src="images/dish-1.png" >
+              <div class="content">
+             
+                  <h3>Tasty burger</h3>
+                  <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+              </div>
+          </div>
+
+          <div class="box">
+            <img class="image" src="images/dish-3.png" >
+            <div class="content">
+                <h3>Tasty Kabab</h3>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <img class="image" src="images/dish-4.png" >
+            <div class="content">
+                <h3>Tasty Pizza</h3>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+            </div>
+        </div>
+        <div class="box">
+            <img class="image" src="images/dish-5.png" >
+            <div class="content">
+                <h3>Tasty ice-cream</h3>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <img class="image" src="images/dish-6.png" >
+            <div class="content">
+                <h3>Tasty Fried Chicken</h3>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+            </div>
+        </div>
+
+        <div class="box">
+            <img class="image" src="images/dish-2.png" >
+            <div class="content">
+                <h3>Tasty Nudges</h3>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem facilis fugit dolores error ratione aut dignissimos neque ab ea dolorum corrupti facere quod totam quas a perferendis, eveniet tempora sint.</p>
+            </div>
+        </div>
+      </div>
+  </section>
+
+  <!-- popular -->
+
+  <section class="popular" id="popular">
+    <h1 class="heading">most <span>popular foods</span></h1>
+    <div class="box-container">
+        <section class="menu">
+            <!-- Food Item 1 -->
+            <div class="box">
+                <img src="images/menu-1.jpg" alt="Tasty Pizza">
+                <span class="price" data-price="150">Rs.150 - Rs.500</span>
+                <h3>Tasty Pizza</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-pizza">Quantity:</label>
+                <input type="number" id="quantity-pizza" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-pizza')">Order Now</a>
+            </div>
+    
+            <!-- Food Item 2 -->
+            <div class="box">
+                <img src="images/menu-2.jpg" alt="Tasty Burger">
+                <span class="price" data-price="80">Rs.80 - Rs.280</span>
+                <h3>Tasty Burger</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-burger">Quantity:</label>
+                <input type="number" id="quantity-burger" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-burger')">Order Now</a>
+            </div>
+    
+            <!-- Food Item 3 -->
+            <div class="box">
+                <img src="images/menu-3.jpg" alt="Tasty Special">
+                <span class="price" data-price="250">Rs.250 - Rs.550</span>
+                <h3>Tasty Special</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-special">Quantity:</label>
+                <input type="number" id="quantity-special" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-special')">Order Now</a>
+            </div>
+    
+            <!-- Food Item 4 -->
+            <div class="box">
+                <img src="images/menu-4.jpg" alt="Tasty Ice-Cream">
+                <span class="price" data-price="50">Rs.50 - Rs.300</span>
+                <h3>Tasty Ice-Cream</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-icecream">Quantity:</label>
+                <input type="number" id="quantity-icecream" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-icecream')">Order Now</a>
+            </div>
+    
+            <!-- Food Item 5 -->
+            <div class="box">
+                <img src="images/menu-5.jpg" alt="Tasty Cupcakes">
+                <span class="price" data-price="70">Rs.70 - Rs.200</span>
+                <h3>Tasty Cupcakes</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-cupcakes">Quantity:</label>
+                <input type="number" id="quantity-cupcakes" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-cupcakes')">Order Now</a>
+            </div>
+    
+            <!-- Food Item 6 -->
+            <div class="box">
+                <img src="images/menu-6.jpg" alt="Tasty Shakes">
+                <span class="price" data-price="100">Rs.100 - Rs.400</span>
+                <h3>Tasty Shakes</h3>
+                <div class="stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <label for="quantity-shakes">Quantity:</label>
+                <input type="number" id="quantity-shakes" value="1" min="1">
+                <a href="#" class="btn" onclick="orderNow(this, 'quantity-shakes')">Order Now</a>
+            </div>
+    
+
+  <!-- popular -->
+  <section class="steps" >
+      <div class="box">
+        <img src="images/step-1.jpg" alt="">
+        <h3>choose your favourite food</h3>
+      </div>
+      <div class="box">
+        <img src="images/step-2.jpg" alt="">
+        <h3>Free and Fast delivery</h3>
+      </div>
+      <div class="box">
+        <img src="images/step-3.jpg" alt="">
+        <h3>Easy payments method</h3>
+      </div>
+      <div class="box">
+        <img src="images/step-4.jpg" alt="">
+        <h3>and finally, enjoy your Food</h3>
+      </div>
+  </section>
+
+<!-- Gallery -->
+
+<section class="gallery" id="gallery">
+    <h1 class="heading">our <span>food Gallery</span></h1>
+    <div class="box-container">
+        <div class="box">
+            <img src="images/home-img-1.png" alt="">
+            <div class="content">
+            <h3>tasty food</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+            <a href="#" class="btn" >Order Now</a>
+        </div>
+    </div>
+
+    <div class="box">
+        <img src="images/home-img-2.png" alt="">
+        <div class="content">
+        <h3>tasty food</h3>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+        <a href="#" class="btn" >Order Now</a>
+    </div>
+</div>
+
+<div class="box">
+    <img src="images/home-img-3.png" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-2.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-3.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-4.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-5.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-6.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-7.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-8.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+
+<div class="box">
+    <img src="images/g-9.jpg" alt="">
+    <div class="content">
+    <h3>tasty food</h3>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt maiores eveniet qui aperiam, nulla mollitia ex ipsa hic? Nesciunt magnam temporibus dolor, aspernatur enim autem voluptate consectetur minus quasi?</p>      
+    <a href="#" class="btn" >Order Now</a>
+</div>
+</div>
+</div>
+
+</section>
+  
+<!-- review -->
+
+<section class="review" id="review">
+    <h1 class="heading">our customer <span>reviews</span></h1>
+    <div class="box-container">
+        <div class="box">
+            <img src="images/pic-1.png" alt="">
+            <h3>Aggarwal</h3>
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+            </div>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati repudiandae excepturi corrupti voluptatem cumque, soluta ab perferendis sunt vitae laborum, distinctio laboriosam et temporibus id totam omnis? Eos, deleniti explicabo.</p>
+        </div>
+
+        <div class="box">
+            <img src="images/pic-2.png" alt="">
+            <h3>Ashwini</h3>
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+            </div>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati repudiandae excepturi corrupti voluptatem cumque, soluta ab perferendis sunt vitae laborum, distinctio laboriosam et temporibus id totam omnis? Eos, deleniti explicabo.</p>
+        </div>
+
+        <div class="box">
+            <img src="images/pic-3.png" alt="">
+            <h3>Rohith</h3>
+            <div class="stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+            </div>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Obcaecati repudiandae excepturi corrupti voluptatem cumque, soluta ab perferendis sunt vitae laborum, distinctio laboriosam et temporibus id totam omnis? Eos, deleniti explicabo.</p>
+        </div>
+    </div>
+</section>
+
+<!-- order -->
+
+<section class="order" id="order">
+
+    <h1 class="heading"> <span>order</span> now </h1>
+
+    <div class="row">
+        
+        <div class="image">
+            <img src="images/order-img.jpg" alt="">
+        </div>
+
+        <form action="">
+
+            <div class="inputBox">
+                <input type="text" placeholder="name">
+                <input type="email" placeholder="email">
+            </div>
+
+            <div class="inputBox">
+                <input type="number" placeholder="number">
+                <input type="text" placeholder="food name">
+            </div>
+
+            <textarea placeholder="address" name="" id="" cols="30" rows="10"></textarea>
+
+            <input type="submit" value="Order Now" class="btn" onclick="alert('Your order has been placed!')">
+
+
+        </form>
+
+    </div>
+
+</section>
+<!-- footer -->
+<section class="footer">
+
+    <div class="share">
+        <i class="fas fa-twitter"></i>
+        <a href="#" class="btn">facebook</a>
+        <a href="#" class="btn">twitter</a>
+        <a href="#" class="btn">instagram</a>
+        <a href="#" class="btn">linkedin</a>
+    </div>
+
+    <h1 class="credit"> created by <span> mr. web designer </span> | all rights reserved! </h1>
+
+</section>
+
+<!-- scroll top button  -->
+<a href="#home" class="fas fa-angle-up" id="scroll-top"></a>
+
+<!-- loader  -->
+<div class="loader-container">
+    <img src="images/loader.gif" alt="">
+</div>
+
+
+
+
+    
+    <script src="script.js"></script>
+    <script>
+        let menu = document.querySelector('#menu-bar');
+let navbar = document.querySelector('.navbar');
+
+
+menu.onclick = () => {
+
+menu.classList.toggle('fa-times');
+navbar.classList.toggle('active');
+
+}
+
+window.onscroll = () => {
+    menu.classList.remove('fa-times');
+    navbar.classList.remove('active');
+
+
+if(window.scrollY > 60){
+    document.querySelector('#scroll-top').classList.add('active');
+  }else{
+    document.querySelector('#scroll-top').classList.remove('active');
+  }
+
+}
+
+function loader(){
+  document.querySelector('.loader-container').classList.add('fade-out');
+}
+
+function fadeOut(){
+  setInterval(loader, 2000);
+}
+
+window.onload = fadeOut();
+function orderNow() {
+            const minPrice = 70;
+            const maxPrice = 200;
+
+            // Get the quantity entered by the user
+            const quantity = document.getElementById("quantity").value;
+
+            // Calculate total price (for simplicity, using minimum price here)
+            const totalPrice = minPrice * quantity;
+
+            // Show a message to the user
+            alert(`You have ordered ${quantity} cupcakes. Total price: Rs.${totalPrice}`);
+        }
+
+    </script>
+</body>
+</html>
